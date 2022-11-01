@@ -91,9 +91,7 @@ def coding_matrix(H, sparse=True):
         Q = csr_matrix(Q)
         Y = csr_matrix(Y)
 
-    tG = utils.binaryproduct(Q, Y)
-
-    return tG
+    return utils.binaryproduct(Q, Y)
 
 
 def coding_matrix_systematic(H, sparse=True):
@@ -114,16 +112,12 @@ def coding_matrix_systematic(H, sparse=True):
     """
     n_equations, n_code = H.shape
 
-    if n_code > 1000 or sparse:
-        sparse = True
-    else:
-        sparse = False
-
+    sparse = bool(n_code > 1000 or sparse)
     P1 = np.identity(n_code, dtype=int)
 
     Hrowreduced = utils.gaussjordan(H)
 
-    n_bits = n_code - sum([a.any() for a in Hrowreduced])
+    n_bits = n_code - sum(a.any() for a in Hrowreduced)
 
     # After this loop, Hrowreduced will have the form H_ss : | I_(n-k)  A |
 
