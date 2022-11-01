@@ -27,14 +27,15 @@ def encode_audio(tG, audio_bin, snr, seed=None):
     n, k = tG.shape
     length, depth = audio_bin.shape
     if depth != 17:
-        raise ValueError("The last dimension of `audio_bin` must be 17."
-                         "Got %s. See `pyldpc.utils.audio2bin`." % depth)
+        raise ValueError(
+            f"The last dimension of `audio_bin` must be 17.Got {depth}. See `pyldpc.utils.audio2bin`."
+        )
+
 
     audio_bin = audio_bin.flatten()
     n_bits_total = audio_bin.size
     n_blocks = n_bits_total // k
-    residual = n_bits_total % k
-    if residual:
+    if residual := n_bits_total % k:
         n_blocks += 1
     resized_audio = np.zeros(k * n_blocks)
     resized_audio[:n_bits_total] = audio_bin
@@ -89,14 +90,12 @@ def decode_audio(tG, H, codeword, snr, audio_shape, maxiter=1000):
     decoded = decoded.flatten()[:np.prod(audio_shape)]
     decoded = decoded.reshape(*audio_shape)
 
-    audio_decoded = bin2audio(decoded)
-
-    return audio_decoded
+    return bin2audio(decoded)
 
 
 def ber_audio(original_audio_bin, decoded_audio_bin):
     """Compute Bit-Error-Rate (BER) by comparing 2 binary audio arrays."""
-    if not original_audio_bin.shape == decoded_audio_bin.shape:
+    if original_audio_bin.shape != decoded_audio_bin.shape:
         raise ValueError("""Original and decoded audio files\'
                             shapes don\'t match !""")
 
@@ -106,6 +105,4 @@ def ber_audio(original_audio_bin, decoded_audio_bin):
 
     errors_bits = abs(original_audio_bin-decoded_audio_bin).flatten().sum()
 
-    ber = errors_bits / total_bits
-
-    return(ber)
+    return errors_bits / total_bits

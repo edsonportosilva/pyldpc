@@ -59,6 +59,4 @@ def encode(tG, v, snr, seed=None):
     sigma = 10 ** (- snr / 20)
     e = rng.randn(*x.shape) * sigma
 
-    y = x + e
-
-    return y
+    return x + e

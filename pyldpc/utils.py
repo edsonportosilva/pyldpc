@@ -83,9 +83,7 @@ def gaussjordan(X, change=0):
         if pivot_old == m-1:
             break
 
-    if change:
-        return A, P
-    return A
+    return (A, P) if change else A
 
 
 def binaryrank(X):
@@ -95,20 +93,18 @@ def binaryrank(X):
 
     A = gaussjordan(A)
 
-    return sum([a.any() for a in A])
+    return sum(a.any() for a in A)
 
 
 def f1(y, sigma):
     """Compute normal density N(1,sigma)."""
-    f = norm.pdf(y, loc=1, scale=sigma)
-    return f
+    return norm.pdf(y, loc=1, scale=sigma)
 
 
 def fm1(y, sigma):
     """Compute normal density N(-1,sigma)."""
 
-    f = norm.pdf(y, loc=-1, scale=sigma)
-    return f
+    return norm.pdf(y, loc=-1, scale=sigma)
 
 
 def _bitsandnodes(H):
@@ -160,10 +156,7 @@ def incode(H, x):
 
 def gausselimination(A, b):
     """Solve linear system in Z/2Z via Gauss Gauss elimination."""
-    if type(A) == scipy.sparse.csr_matrix:
-        A = A.toarray().copy()
-    else:
-        A = A.copy()
+    A = A.toarray().copy() if type(A) == scipy.sparse.csr_matrix else A.copy()
     b = b.copy()
     n, k = A.shape
 

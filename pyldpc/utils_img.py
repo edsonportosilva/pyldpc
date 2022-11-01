@@ -4,7 +4,7 @@ from . import utils
 
 def gray2bin(img):
     """Convert a GrayScale Image to a binary array."""
-    if not len(img.shape) == 2:
+    if len(img.shape) != 2:
         raise ValueError("""{} must have 2 dimensions.
                          Make sure it\'s a grayscale image.""")
 
@@ -35,7 +35,7 @@ def rgb2bin(img):
     """Convert an RGB Image to a binary array."""
     height, width, depth = img.shape
 
-    if not depth == 3:
+    if depth != 3:
         raise ValueError("""{}\'s 3rd dimension must be equal to 3 (RGB).
                              Make sure it\'s an RGB image.""")
 
